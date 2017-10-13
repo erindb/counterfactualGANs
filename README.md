@@ -101,15 +101,22 @@ python main.py --dataset celebA --input_height=108 --crop
 
 * Week 1 ~ set up environment
 	- Alex: 
-		* [ ] python 3
-		* [ ] tensorflow 0.12.1
-		* [ ] download and run [GAN](https://github.com/carpedm20/DCGAN-tensorflow)
-		* [ ] we *might* need access to `cocoserv2`
+		* [x] python 3
+		* [x] tensorflow 0.12.1
+		* [x] download and train [GAN](https://github.com/carpedm20/DCGAN-tensorflow)
+		* [x] we *might* need access to `cocoserv2`
 	- Erin
-		* [ ] make repo & integrate with slack
-* Week 2-3 counterfactually sample from GAN
+		* [x] make repo & integrate with slack
+* Week 2 sample from GAN
+	* [ ] explore/understand trained model
 	* [ ] find where the noise vector is passed in and be able to modify it
-	* [ ] pick a base image
+	* [ ] pick a base noise vector and image that it generates
+	* [ ] make (or find) a function in python that
+		- takes in a noise vector and
+		- outputs the generated image from that noise vector
+		- add/call this function in `main.py`
+	* [ ] record how long this takes to run
+* Week 3 counterfactual sampling
 	* [ ] write version of ESM model for changing GAN noise input
 	* [ ] sample counterfactual distribution for that base image
 * Week 4-5 ~ classifiers
