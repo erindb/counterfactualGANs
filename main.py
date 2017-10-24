@@ -11,7 +11,26 @@ DIM = ???
 
 def generate_image(z):
 	# generate image! :)
-	network = # load our pre-existing model from checkpoints
+	network = # DCGAN model.load(checkpoint files)
+	'''
+    THIS IS THE KEY
+	  def load(self, checkpoint_dir):
+    import re
+    print(" [*] Reading checkpoints...")
+    checkpoint_dir = os.path.join(checkpoint_dir, self.model_dir)
+
+    ckpt = tf.train.get_checkpoint_state(checkpoint_dir)
+    if ckpt and ckpt.model_checkpoint_path:
+      ckpt_name = os.path.basename(ckpt.model_checkpoint_path)
+      self.saver.restore(self.sess, os.path.join(checkpoint_dir, ckpt_name))
+      counter = int(next(re.finditer("(\d+)(?!.*\d)",ckpt_name)).group(0))
+      print(" [*] Success to read {}".format(ckpt_name))
+      return True, counter
+    else:
+      print(" [*] Failed to find a checkpoint")
+      return False, 0
+
+	'''
     img_vector = network.generator(z)
     # use imsave() and save_images() to save into a path (from utils.py)
     
