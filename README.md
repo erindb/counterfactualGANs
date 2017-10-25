@@ -121,17 +121,19 @@ python main.py --dataset celebA --input_height=108 --crop
 	* [x] read up on DCGANs: how many images per noise vector?
 		- Ans: one, given that the weights and biases are fixed. it is a deterministic function at that point. duh.)
 * Week 3 debugging and exploring forward model
+	* [ ] debug and run forward model (`main.py`)
 	* [ ] record how long this takes to run (loading model / sampling)
-	* [ ] explore sampled images for different noise vectors (as needed, move images over `scp cocoserv2:/home/alex/samples/test_arange_42.png .`)
+	* [ ] explore sampled images for different noise vectors (as needed, move images over `scp cocoserv2:/home/alex/samples/test_arange_42.png .` or `rsync cocoserv2:/home/alex/samples/ .` for the whole directory)
 		- get a sense of the full distribution over images
 		- how much do we need to change a noise vector to get noticable changes in the images?
 		- are there some dimensions that cause bigger changes than others?
+	* [ ] make that cool gif of the different dimensions
 	* [ ] short presentation of the distribution over faces that the trained model generates
 * Week 4  counterfactual sampling
 	* [ ] pick a base noise vector and image that it generates
 	* [ ] write version of ESM model for changing GAN noise input
 	* [ ] sample counterfactual distribution for that base image
-* Week 4-5 ~ classifiers
+* Week 5-6 ~ classifiers
 	* [ ] download [data](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html)
 		- describe exact format of data
 	* [ ] quick lit review of things people have done with this dataset
@@ -139,9 +141,9 @@ python main.py --dataset celebA --input_height=108 --crop
 	* [ ] decide on a subset of features to look at
 		- maybe reference https://arxiv.org/pdf/1709.02023.pdf
 	* [ ] train some classifiers on those features
-* Week 6 ~ conditionally sample from GAN
+* Week 7 ~ conditionally sample from GAN
 	- should we use pyro?
-* Week 7 ~ condition on specific counterfactuals
+* Week 8 ~ condition on specific counterfactuals
 
 ## Some references/papers
 
