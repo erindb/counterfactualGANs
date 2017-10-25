@@ -118,14 +118,17 @@ python main.py --dataset celebA --input_height=108 --crop
 		- install Xquartz
 		- `ssh -Y cocoserv2`
 		- to open an image `eog [IMG].png`
-* Week 3 debugging forward model
-	* [ ] pick a base noise vector and image that it generates
+	* [x] read up on DCGANs: how many images per noise vector?
+		- Ans: one, given that the weights and biases are fixed. it is a deterministic function at that point. duh.)
+* Week 3 debugging and exploring forward model
 	* [ ] record how long this takes to run (loading model / sampling)
-	* [ ] read up on DCGANs (e.g. how many images per noise vector?)
 	* [ ] explore sampled images for different noise vectors (as needed, move images over `scp cocoserv2:/home/alex/samples/test_arange_42.png .`)
-		- for different ranges of noise vectors, how variable are the images?
-		- how much do we need to change a noise vector to get noticable changes in 
+		- get a sense of the full distribution over images
+		- how much do we need to change a noise vector to get noticable changes in the images?
+		- are there some dimensions that cause bigger changes than others?
+	* [ ] short presentation of the distribution over faces that the trained model generates
 * Week 4  counterfactual sampling
+	* [ ] pick a base noise vector and image that it generates
 	* [ ] write version of ESM model for changing GAN noise input
 	* [ ] sample counterfactual distribution for that base image
 * Week 4-5 ~ classifiers
