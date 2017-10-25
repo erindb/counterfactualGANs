@@ -107,16 +107,25 @@ python main.py --dataset celebA --input_height=108 --crop
 		* [x] we *might* need access to `cocoserv2`
 	- Erin
 		* [x] make repo & integrate with slack
-* Week 2 sample from GAN
-	* [ ] explore/understand trained model
-	* [ ] find where the noise vector is passed in and be able to modify it
-	* [ ] pick a base noise vector and image that it generates
-	* [ ] make (or find) a function in python that
+* Week 2 design forward model given noise
+	* [x] explore/understand trained model
+	* [x] find where the noise vector is passed in and be able to modify it
+	* [x] make a function in python that
 		- takes in a noise vector and
-		- outputs the generated image from that noise vector
+		- outputs the generated image(s) from that noise vector
 		- add/call this function in `main.py`
-	* [ ] record how long this takes to run
-* Week 3 counterfactual sampling
+	* [x] set up X11 forwarding
+		- install Xquartz
+		- `ssh -Y cocoserv2`
+		- to open an image `eog [IMG].png`
+* Week 3 debugging forward model
+	* [ ] pick a base noise vector and image that it generates
+	* [ ] record how long this takes to run (loading model / sampling)
+	* [ ] read up on DCGANs (e.g. how many images per noise vector?)
+	* [ ] explore sampled images for different noise vectors (as needed, move images over `scp cocoserv2:/home/alex/samples/test_arange_42.png .`)
+		- for different ranges of noise vectors, how variable are the images?
+		- how much do we need to change a noise vector to get noticable changes in 
+* Week 4  counterfactual sampling
 	* [ ] write version of ESM model for changing GAN noise input
 	* [ ] sample counterfactual distribution for that base image
 * Week 4-5 ~ classifiers
