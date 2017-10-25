@@ -7,7 +7,7 @@ from model import *
 from ops import *
 from utils import *
 
-DIM = ???
+DIM = 100
 
 flags = tf.app.flags
 flags.DEFINE_integer("epoch", 25, "Epoch to train [25]")
