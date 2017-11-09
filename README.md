@@ -120,20 +120,30 @@ python main.py --dataset celebA --input_height=108 --crop
 		- to open an image `eog [IMG].png`
 	* [x] read up on DCGANs: how many images per noise vector?
 		- Ans: one, given that the weights and biases are fixed. it is a deterministic function at that point. duh.)
-* Week 3 debugging and exploring forward model
-	* [ ] debug and run forward model (`main.py`)
-	* [ ] record how long this takes to run (loading model / sampling)
-	* [ ] explore sampled images for different noise vectors (as needed, move images over `scp cocoserv2:/home/alex/samples/test_arange_42.png .` or `rsync cocoserv2:/home/alex/samples/ .` for the whole directory)
+* Week 3 & 4 debugging and exploring forward model
+	* [x] debug and run forward model (`main.py`)
+		- image drawing tool that we took from the DCGANs repo *requires* 64 images at a time (or whatever the batch size was in training)
+	* [x] record how long this takes to run (loading model / sampling)
+		- it's pretty fast
+	* [x] explore sampled images for different noise vectors (as needed, move images over `scp cocoserv2:/home/alex/samples/test_arange_42.png .` or `rsync cocoserv2:/home/alex/samples/ .` for the whole directory)
 		- get a sense of the full distribution over images
+			- between 0 and 1 we definitely get some plausible images. and even up to about 5, they're pretty good for some dimensions at least. outside of that, things get crazy.
+			- this makes sense, cause it was trained with uniform(-1, 1)
 		- how much do we need to change a noise vector to get noticable changes in the images?
 		- are there some dimensions that cause bigger changes than others?
-	* [ ] make that cool gif of the different dimensions
-	* [ ] short presentation of the distribution over faces that the trained model generates
-* Week 4  counterfactual sampling
-	* [ ] pick a base noise vector and image that it generates
-	* [ ] write version of ESM model for changing GAN noise input
-	* [ ] sample counterfactual distribution for that base image
-* Week 5-6 ~ classifiers
+	* [x] short presentation of the distribution over faces that the trained model generates
+		- yayyy
+* Week 5 & 6 counterfactual sampling
+	* [ ] pick 3 base noise vectors (including the origin) that generate good images and have different properties (like glasses or smiling)
+	* [ ] make that cool gif for those different base images
+	* [ ] make a `gaussian_cf_sampler` function that takes in a base image vector and number of samples (e.g. 64) and outputs that number of "counterfactual samples" by taking a `np.random.randn` vector and scaling it to center around that base image.
+	* [ ] make a [`esm_cf_sampler`](https://philpapers.org/rec/LUCAIP) function that for each dimension:
+		- with probability `stickiness` (start with 0.5) keeps the same number as the base image has for that dimension
+		- otherwise samples from `np.random.uniform(-1, 1)`
+		- try out different values for `stickiness` and different ranges for `np.random.uniform()`
+	* [ ] start looking into [`Pyro`](http://pyro.ai/) tutorials
+		- make note of anything that's unclear (and/or submit a pull request)
+* Week 6-7 ~ classifiers
 	* [ ] download [data](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html)
 		- describe exact format of data
 	* [ ] quick lit review of things people have done with this dataset
@@ -141,9 +151,9 @@ python main.py --dataset celebA --input_height=108 --crop
 	* [ ] decide on a subset of features to look at
 		- maybe reference https://arxiv.org/pdf/1709.02023.pdf
 	* [ ] train some classifiers on those features
-* Week 7 ~ conditionally sample from GAN
+* Week 8 ~ conditionally sample from GAN
 	- should we use pyro?
-* Week 8 ~ condition on specific counterfactuals
+* Week 9 ~ condition on specific counterfactuals
 
 ## Some references/papers
 
@@ -161,5 +171,8 @@ python main.py --dataset celebA --input_height=108 --crop
 
 [Neural Face](http://carpedm20.github.io/faces/) uses a vector `z` that consists of 100 real numbers ranging from 0 to 1.
 They visualize what happens when each element in the noise vector is changed.
+
+* smiling people have wrinkles around their mouths. that's causal (muscles and stuff). and it did learn it. so that's cool.
+* can we do negative numbers?
 
 
