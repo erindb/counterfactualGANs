@@ -8,7 +8,6 @@ import model
 import ops
 import utils
 
-
 flags = tf.app.flags
 flags.DEFINE_integer("epoch", 25, "Epoch to train [25]")
 flags.DEFINE_float("learning_rate", 0.0002, "Learning rate of for adam [0.0002]")
@@ -26,12 +25,26 @@ flags.DEFINE_string("sample_dir", "samples", "Directory name to save the image s
 flags.DEFINE_boolean("train", False, "True for training, False for testing [False]")
 flags.DEFINE_boolean("crop", False, "True for training, False for testing [False]")
 flags.DEFINE_boolean("visualize", True, "True for visualizing, False for nothing [False]")
+
+flags.DEFINE_integer("vector_opt", 1, "0 for all zeros, 1 for random uniform, 2 to load vector, 3 to cf sample")
+flags.DEFINE_string("vector", None, "If vector_opt is 2 or 3, name of .npy file to read in")
+flags.DEFINE_boolean("gif", False, "Make gif of base images instead of creating new images.")
 FLAGS = flags.FLAGS
 
-DIM = 100 #FLAGS.input_height
+DIM = 100
+VIZ_OPTION = 1 #Visualization option
+NUM_FRAMES = 10 #For making .gifs
+BASE_VECTORS = ['origin.npy', 'no_smile.npy', 'man.npy', 'glasses_mustache.npy'] #the array files for our base images
 
 run_config = tf.ConfigProto()
 run_config.gpu_options.allow_growth=True
+
+def load_vector(z=None):
+    vec = np.empty(shape=(FLAGS.batch_size, DIM))
+    base = np.load(FLAGS.vector)
+    for i in range(FLAGS.batch_size):
+        vec[i] = base
+    return vec
 
 def restore_model():    
     sess = tf.Session(config=run_config)
@@ -51,21 +64,52 @@ def restore_model():
     
     dcgan.load(FLAGS.checkpoint_dir)  # by here, we should have our recovered model
     return dcgan, sess
-
-#img_vector = network.generator(z)
-# use imsave() and save_images() to save into a path (from utils.py)
   
 def generate_image(z, dcgan, session, visualize_option):
     image_frame_dim = int(math.ceil(FLAGS.batch_size**.5))
     sample_image = session.run(dcgan.sampler, feed_dict={dcgan.z: z})
-    utils.save_images(sample_image, [image_frame_dim, image_frame_dim], './samples/single_img_%s.png' % 'single_sample')
+    utils.save_images(sample_image, [image_frame_dim, image_frame_dim], './samples/single_img.png')
 
+def gaussian_cf_sampler(z):
+    sigma = math.sqrt(1.0 / 12)
+    cf_sample = np.empty(shape=(FLAGS.batch_size, DIM))
+    for i in range(FLAGS.batch_size):
+        cf_sample[i] = sigma * np.random.randn(DIM) + z
+    return cf_sample
+
+def esm_cf_sampler(z, stickiness):
+    cf_sample = np.empty(shape=(FLAGS.batch_size, DIM))
+    for i in range(FLAGS.batch_size):
+        for j in range(DIM):
+            if (np.random.uniform() >= stickiness):
+                cf_sample[i][j] = np.random.uniform(-1, 1)
+            else:
+                cf_sample[i][j] = z[j]
+    return cf_sample
 
 def main():
-    z = np.random.rand(FLAGS.batch_size, DIM)
-    print(z)
+    if (FLAGS.vector_opt == 0):
+        z = np.zeros(shape=(FLAGS.batch_size, DIM))
+    elif (FLAGS.vector_opt == 1):
+        z = np.random.uniform(-0.5, 0.5, size=(FLAGS.batch_size, DIM))
+    elif (FLAGS.vector_opt == 2):
+        z = load_vector()
+    elif (FLAGS.vector_opt == 3):
+        z = gaussian_cf_sampler(np.load(FLAGS.vector))
+    elif (FLAGS.vector_opt == 4):
+        z = esm_cf_sampler(np.load(FLAGS.vector), 0.5)
+    else:
+        print("Invalid value for vector_opt argument. 0-4 are the only acceptable values.")
+        print("Use -h or --help flags for more information.")
+        return
+ 
+    np.save("./prev_img_vector.npy", z)  # save our vectors to a file, so if we like one we can replicate
     network, tf_session = restore_model()
-    OPTION = 1 #Visualization option
-    generate_image(z, network, tf_session, OPTION)
+    
+    if (FLAGS.gif):
+        base_images = [np.load('./counterfactualGANs/base_vectors/%s' % i) for i in BASE_VECTORS]
+        utils.make_gif(base_images, 'bases.gif')
+    else:
+        generate_image(z, network, tf_session, VIZ_OPTION)
 
 main()
