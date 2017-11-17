@@ -133,27 +133,31 @@ python main.py --dataset celebA --input_height=108 --crop
 		- are there some dimensions that cause bigger changes than others?
 	* [x] short presentation of the distribution over faces that the trained model generates
 		- yayyy
-* Week 5 & 6 counterfactual sampling
-	* [ ] pick 3 base noise vectors (including the origin) that generate good images and have different properties (like glasses or smiling)
-	* [ ] make that cool gif for those different base images
-	* [ ] make a `gaussian_cf_sampler` function that takes in a base image vector and number of samples (e.g. 64) and outputs that number of "counterfactual samples" by taking a `np.random.randn` vector and scaling it to center around that base image.
-	* [ ] make a [`esm_cf_sampler`](https://philpapers.org/rec/LUCAIP) function that for each dimension:
+* Week 5 ~ counterfactual sampling
+	* [x] pick 3 base noise vectors (including the origin) that generate good images and have different properties (like glasses or smiling)
+		* origin, not smiling girl, guy, orange guy with glasses
+	* [x] make a `gaussian_cf_sampler` function that takes in a base image vector and number of samples (e.g. 64) and outputs that number of "counterfactual samples" by taking a `np.random.randn` vector and scaling it to center around that base image.
+	* [x] make a [`esm_cf_sampler`](https://philpapers.org/rec/LUCAIP) function that for each dimension:
 		- with probability `stickiness` (start with 0.5) keeps the same number as the base image has for that dimension
 		- otherwise samples from `np.random.uniform(-1, 1)`
 		- try out different values for `stickiness` and different ranges for `np.random.uniform()`
-	* [ ] start looking into [`Pyro`](http://pyro.ai/) tutorials
+	* [x] start looking into [`Pyro`](http://pyro.ai/) tutorials
 		- make note of anything that's unclear (and/or submit a pull request)
-* Week 6-7 ~ classifiers
-	* [ ] download [data](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html)
-		- describe exact format of data
-	* [ ] quick lit review of things people have done with this dataset
-	* [ ] decide on architecture (probably convolutional NN)
-	* [ ] decide on a subset of features to look at
-		- maybe reference https://arxiv.org/pdf/1709.02023.pdf
-	* [ ] train some classifiers on those features
-* Week 8 ~ conditionally sample from GAN
-	- should we use pyro?
-* Week 9 ~ condition on specific counterfactuals
+* Week 6 ~ smiling classifier
+	* [ ] look for pre-existing classifiers for "smiling" on CelebA, ideally in PyTorch
+		- if you can find one, try to run it and eyeball the output
+		- if not, start making one
+			* [ ] follow a tutorial like [this one](http://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html)
+			* [ ] inspect [data](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html)
+				- what's the format?
+	* [ ] keep looking into [`Pyro`](http://pyro.ai/) tutorials
+		- make note of anything that's unclear (and/or submit a pull request)
+* Week 7 ~ conditionally sample from GAN
+	* [ ] make a function that samples an image, runs the classifier, and returns only images with classification "smiling"
+* Week 8 ~ extend to more labels
+	* [ ] the ones in that picture of the bayes net
+* Week 9 ~ evaluate specific causal links
+	* [ ] e.g. `old --> bald <-- male`
 
 ## Some references/papers
 
