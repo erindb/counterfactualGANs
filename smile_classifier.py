@@ -12,18 +12,28 @@ class AlexNet(nn.Module):
     def __init__(self, num_classes=1):
         super(AlexNet, self).__init__()
         self.features = nn.Sequential(
+            # start with 64x64 pixel image
             nn.Conv2d(3, 64, kernel_size=9, stride=1, padding=2),
+            # new size = (W - F + 2P) / S + 1= (64 - 9 + 2*2) / 1 + 1 = 60
             nn.ReLU(inplace=True),
+            # 60 x 60 dim "image"
             nn.MaxPool2d(kernel_size=2, stride=2),
+            # (60 - 2) / 2 + 1 = 30
+            # 30 x 30 dim "image"
             nn.Conv2d(64, 192, kernel_size=5, padding=1),
+            # (30 - 5 + 2*1) / 1 + 1 = 28
             nn.ReLU(inplace=True),
+            # 28 x 28 dim "image"
             nn.MaxPool2d(kernel_size=2, stride=2),
+            # 14 x 14 dim "image"
             nn.Conv2d(192, 384, kernel_size=4, padding=1),
             nn.ReLU(inplace=True),
+            # (14 - 4 + 2) / 1 + 1 = 13
             nn.Conv2d(384, 256, kernel_size=3),
             nn.ReLU(inplace=True),
-            #nn.Conv2d(256, 256, kernel_size=3, padding=1),
-            #nn.ReLU(inplace=True),
+            # 13 x 13 dim "image"
+            # nn.Conv2d(256, 256, kernel_size=3, padding=1),
+            # nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2), # the original model ended up with 6*6*256, and so do we
         )
         self.classifier = nn.Sequential(
