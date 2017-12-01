@@ -143,20 +143,32 @@ python main.py --dataset celebA --input_height=108 --crop
 		- try out different values for `stickiness` and different ranges for `np.random.uniform()`
 	* [x] start looking into [`Pyro`](http://pyro.ai/) tutorials
 		- make note of anything that's unclear (and/or submit a pull request)
-* Week 6 ~ smiling classifier
-	* [ ] look for pre-existing classifiers for "smiling" on CelebA, ideally in PyTorch
-		- if you can find one, try to run it and eyeball the output
-		- if not, start making one
-			* [ ] follow a tutorial like [this one](http://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html)
-			* [ ] inspect [data](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html)
-				- what's the format?
+* Week 6 ~ find an image classifier
+	* [x] look for pre-existing classifiers for "smiling" on CelebA, ideally in PyTorch
+		- http://pytorch.org/docs/master/torchvision/models.html
+	* [x] learn about convolutional NNs
+		- http://cs231n.github.io/convolutional-networks/
+	* [x] start to adapt AlexNet to our 64x64 images
+* Week 7 ~ smiling classifier
+	* [ ] build smiling classifier
+		- figure out how to load CelebA data (e.g. copy CDGAN code for this)
+		- 1-class: smiling or not
+		- 5 features
+		- set up to use CUDA
+		- try AlexNet, but if it's too slow, simplify it or grab another model
+	* [ ] run classifier on cocoserv2
+	* [ ] report performance of the classifier
+		- accuracy
+		- pull out a few misclassified images
+		- pull out a few correctly classified images
+	* [ ] Erin: sudo access
+* Week 8 ~ conditionally sample from GAN
+	* [ ] make a function that samples an image, runs the classifier, and returns only images with classification "smiling"
 	* [ ] keep looking into [`Pyro`](http://pyro.ai/) tutorials
 		- make note of anything that's unclear (and/or submit a pull request)
-* Week 7 ~ conditionally sample from GAN
-	* [ ] make a function that samples an image, runs the classifier, and returns only images with classification "smiling"
-* Week 8 ~ extend to more labels
+* Week 9 ~ extend to more labels
 	* [ ] the ones in that picture of the bayes net
-* Week 9 ~ evaluate specific causal links
+* Week 10 ~ evaluate specific causal links
 	* [ ] e.g. `old --> bald <-- male`
 
 ## Some references/papers
@@ -178,5 +190,6 @@ They visualize what happens when each element in the noise vector is changed.
 
 * smiling people have wrinkles around their mouths. that's causal (muscles and stuff). and it did learn it. so that's cool.
 * can we do negative numbers?
+* pytorch dcgan: https://github.com/yunjey/pytorch-tutorial/tree/master/tutorials/03-advanced/deep_convolutional_gan
 
 
